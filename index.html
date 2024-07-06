@@ -39,72 +39,667 @@
     </div>
 
     <div class="moiz">
-      <h1>-: :-</h1>
+      <h1>-: The DOM :-</h1>
       <p class="ali">
-        <!-- 1 -->
+        In previous chapters you learned two different ways to target components of your web  <br>
+page so you could read or set them. You learned to getElementById, and you learned to <br>
+getElementsByTagName. These are often the best methods for targeting things, but they have <br>
+limitations. The first, getElementById, gives you access only to those components that have <br>
+been assigned an id. The second, getElementsByTagName, is good for wholesale changes, but <br>
+is a bit cumbersome for fine surgical work. Both approaches can change things on your web <br>
+page, but neither is able to deal with all the things on the page, to create new things, to move <br>
+existing things, or to delete them. <br>
+Fortunately, both of these approaches are only two of many methods for working with the <br>
+Document Object Model, the DOM. The DOM is an organization chart, created <br>
+automatically by the browser when your web page loads, for the whole web page. All the <br>
+things on your web page—the tags, the text blocks, the images, the links, the tables, the style <br>
+attributes, and more—have spots on this organization chart. This means that your JavaScript <br>
+code can get its hands on anything on your web page, anything at all, just by saying where that <br>
+thing is on the chart. What's more, your JavaScript can add things, move things, or delete things <br>
+by manipulating the chart. If you wanted to (you wouldn't), you could almost create an entire <br>
+web page from scratch using JavaScript's DOM methods. <br>
+Here's a simplified web page. I've indented the different levels in the hierarchy. The three <br>
+top levels of the DOM are always the same for a standard web page. The document is the first <br>
+level. Under the document is the second level, the html. And under the html are the co-equal <br>
+third levels, the head and the body. Under each of these are more levels. <br>
+1st level: document <br>
+2nd level: < html>  <br>
+3rd level: < head> <br>
+4th level: < title> <br>
+5th level: Simple document <br>
+< /title> <br>
+< /head> <br>
+3rd level < body> <br>
+4th level < p> <br>
+5th level There's not much to this. <br>
+< /p> <br>
+< /body> <br>
+< /html> <br>
+Here's the same thing, shown as an organization chart. Note that this is an idealized chart, <br>
+cleaned of junk artifacts that most browsers insert in the DOM. I'll show you how to clean out  <br>
+these artifacts in later chapters. <br>
+As you can see, every single thing on the web page is included, even the title text and the <br>
+paragraph text. Let's make it a little more complicated by adding a div and a second paragraph. <br>
+Here it is in HTML form. <br>
+1st level: document <br>
+2nd level: < html> <br>
+3rd level: < head> <br>
+4th level: < title> <br>
+5th level: Simple document <br>
+</ title> <br>
+</ head> <br>
+3rd level < body> <br>
+4th level < div> <br>
+5th level < p> <br>
+6th level There's not much to this. <br>
+< /p> <br>
+5th level < p> <br>
+6th level Nor to this. <br>
+< /p> <br>
+< /div> <br>
+< /body> <br>
+< /html> <br>
+And in organization chart (minus any junk artifacts)...  <br>
+In a company organization chart, each box represents a person. In the DOM organization <br>
+chart, each box represents a node. The HTMLpage represented above, in its cleaned-up DOM <br>
+form, has 11 nodes: the document node, the html node, the head and body nodes, the title node, <br>
+the div node, two paragraph nodes, and three text nodes, one for the title and one for each of <br>
+the two paragraphs. <br>
+In this particular chart, there are three types of nodes: document, element, and text. The <br>
+document node is the top level. Element nodes are < html>, < head>, < body>, < title>, < div>, <br>
+and < p>. Text nodes are the strings that comprise the title and the two paragraphs. <br>
       </p>
     </div>
     <div class="moiz">
-      <h1>-: :-</h1>
+      <h1>-: The DOM:Parents and children :-</h1>
       <p class="ali">
-        <!-- 2 -->
+        Can you name the second child of the 44th President of the United States? That would be  <br>
+Sasha. How about the parent (male) of the 43rd President? That's right, George. <br>
+Welcome to the most fundamental way of designating nodes of the Document Object <br>
+Model (DOM). You can designate any node of the DOM by saying the node is the xth child of a <br>
+particular parent. You can also designate a node by saying it's the parent of any child. <br>
+Take a look at the simplified html document from the last chapter. <br>
+1st level: document <br>
+2nd level: < html> <br>
+3rd level: < head> <br>
+4th level: < title> <br>
+5th level: Simple document <br>
+< /title> <br>
+< /head> <br>
+3rd level < body> <br>
+4th level < div> <br>
+5th level < p> <br>
+6th level There's not much to this. <br>
+< /p> <br>
+5th level < p> <br>
+6th level Nor to this. <br>
+< /p> <br>
+< /div> <br>
+< /body> <br>
+< /html> <br>
+Except for the document node, each node is enclosed within another node. The < head> <br>
+and < body> nodes are enclosed within the < html> node. The < div> node is enclosed within <br>
+the < body> node. Two < p> nodes are enclosed within the < div> node. And a text node is <br>
+enclosed within each of the < p> nodes. <br>
+When a node is enclosed within another node, we say that the enclosed node is a child of <br>
+the node that encloses it. So, for example, the < div> node is a child of the < body> node. <br>
+Conversely, the < body> node is the parent of the < div> node. Here's the organization chart <br>
+from the last chapter, again cleaned of junk artifacts, showing all the parents and their children. <br>
+As you can see, < html> is the child of the document...< head> and < body> are the <br>
+children of < html>...< div> is the child of < body>...two < p>'s are the children of  < div>... each<br>
+text node is the child of a < p>. Conversely, the document is the parent of < html>, < html> is <br>
+the parent of < head> and < body>, < head> is the parent of < title>, < title> is the parent of a <br>
+text node, and so on. Nodes with the same parent are known as siblings. So, < head> and <br>
+< body> are siblings because < html> is the parent of both. The two < p>'s are siblings because <br>
+< div> is the parent of both. <br>
+Starting at the bottom of the chart, the text "Nor to this." is a child of < p>, which is a child <br>
+of < div>, which is a child of < body>, which is a child of < html>, which is a child of the <br>
+document. <br>
+Now look at this markup. <br>
+< p>This is < em>important< /em>!< /p> <br>
+If you made a chart for this paragraph, you might think that all the text is a child of the < p> <br>
+node. But remember, every node that is enclosed by another node is the child of the node that <br>
+encloses it. Since the text node "important" is enclosed by the element node < em>, this <br>
+particular text node is the child of < em>, not < p>. The text nodes "This is " and "!" as well as<br>
+the element node < em> are siblings, because they're all enclosed by < p>. They're all children <br>
+of < p>.
+      </p> 
+    </div>
+    <div class="moiz">
+      <h1>-: The DOM:Finding children :-</h1>
+      <p class="ali">
+        As you learned in the last chapter, the Document Object Model (DOM) is a hierarchy of <br>
+parents and children. Everything on the web page, excluding the document itself, is a child of <br>
+something else. So now let's talk about how your JavaScript code can make use of this <br>
+hierarchy of parents and children to read or change virtually anything on a web page. <br>
+Let's begin with the methods you've already learned for targeting things on the web page. <br>
+You'll recall from earlier chapters that you can target an element by specifying its id, if it <br> has
+one. <br>
+var eField = document.getElementById("email"); <br>
+The statement above targets the element with the id of "email". <br>
+You also learned how to make an array-like collection of all the elements of a particular <br>
+kind within the document... <br>
+var eField = document.getElementsByTagName("p"); <br>
+Having made a collection of paragraphs, you can target any paragraph within the <br>
+collection so that you can, for example, read its contents. <br>
+var contents = p[2].innerHTML; <br>
+The statement above assigns the text string contained within the third paragraph of the <br>
+document to the variable contents. <br>
+An alternative to listing all the elements of a certain kind in the document is to narrow the <br>
+focus below the document level, for example to a div, and then make a collection within that <br>
+div. <br>
+1 var d = document.getElementById("div3"); <br>
+2 var p = d.getElementsByTagName("p"); <br>
+3 var contents = p[2].innerHTML; <br>
+In the example above, you a generate a collection not of all the paragraph elements in the <br>
+document, but only those paragraph elements within the div that has an id of "div3". Then you <br>
+target one of those paragraphs. <br>
+Now consider this markup. <br>
+< body> <br>
+< div id="cal"> <br>
+< p>Southern Cal is sunny.< /p> <br>
+< p>Northern Cal is rainy.< /p> <br>
+< p>Eastern Cal is desert.< /p> <br>
+< /div> <br>
+< div id="ny"> <br>
+< p>Urban NY is crowded.< /p> <br>
+< p>Rural NY is sparse.< /p> <br>
+< /div> <br>
+< /body> <br>
+If you wanted to read the contents of the last paragraph in the markup, you could write... <br>
+1 var p = document.getElementsByTagName("p"); <br>
+2 var contents = p[4].innerHTML; <br>
+Line 1 makes a collection of all the < p>s in the document and assigns the collection to the <br>
+variable p. Line 2 "reads" the text contained in the 5th paragraph of the document. <br>
+Another approach: You could target the same paragraph by narrowing the collection of <br>
+elements to those that are just in the second div. <br>
+1 var div = document.getElementById("ny"); <br>
+2 var p = div.getElementsByTagName("p"); <br>
+3 var contents = p[1].innerHTML; <br>
+Here's the breakdown: <br>
+1. Assigns the div with the id "ny" to the variable div <br>
+2. Makes a collection of all the < p>s in the div and assigns the collection to the variable p <br>
+3. "Reads" the text contained in the 2nd paragraph of the div and assigns it to the variable <br>
+contents <br>
+Now I'll show you a new way to target the paragraph, by using the DOM organization <br>
+chart. <br>
+1 var p = document.childNodes[0].childNodes[1].childNodes[1].childNodes[1]; <br>
+2 var contents = p.innerHTML; <br>
+I'll highlight each child level and tell you what it points to. <br>
+1. document.childNodes[0].childNodes[1].childNodes[1].childNodes[1]; is the <br>
+first child of the document, < html> <br>
+2. document.childNodes[0].childNodes[1].childNodes[1].childNodes[1]; is the <br>
+second child of < html>, < body> <br>
+3. document.childNodes[0].childNodes[1].childNodes[1].childNodes[1]; is the <br>
+second child of < body>, < div> with the id "ny" <br>
+4. document.childNodes[0].childNodes[1].childNodes[1].childNodes[1]; is the <br>
+second child of < div> with the id "ny", the second < p> within the div <br>
+Note: The code above assumes the browser hasn't included any junk artifacts in the DOM. <br>
+I'll discuss these in the next chapter. <br>
+As we work our way down the organization chart, each parent is followed by a dot, <br>
+which is followed by the keyword childNodes, which is followed by a number in brackets, as <br>
+in array notation. As in array notation, the first child is number 0. <br>
+Here's the markup again. The key players in the code above are highlighted. <br>
+< body> <br>
+< div id="cal"> <br>
+< p>Southern Cal is sunny.< /p> <br>
+< p>Northern Cal is rainy.< /p> <br>
+< p>Eastern Cal is desert.< /p> <br>
+< /div> <br>
+< div id="ny"> <br>
+< p>Urban NY is crowded.< /p> <br>
+< p>Rural NY is sparse.< /p> <br>
+< /div> <br>
+< /body> <br>
+In the example above, I showed you how to work your way down to the targeted node <br>
+starting at the document level. But in practice, you'd normally start at a lower level. For <br>
+example, you could start with the second div, specifying its id. Then you'd target one of its <br>
+children. <br>
+1 var d = document.getElementById("ny"); <br>
+2 var p = d.childNodes[1]; <br>
+3 var contents = p.innerHTML; <br>
       </p>
     </div>
     <div class="moiz">
-      <h1>-: :-</h1>
+      <h1>-: The DOM:Junk artifacts and nodeType :-</h1>
       <p class="ali">
-        <!-- 1 -->
+        It's time to talk about the junk artifacts of the DOM, the pesky things that I've been <br>
+referring to in the last three chapters. Let's revisit the simplified web page that we've been <br>
+using as an example. <br>
+1st level: document <br>
+2nd level: < html> <br>
+3rd level: < head> <br>
+4th level: < title> <br>
+5th level: Simple document <br>
+< /title> <br>
+< /head> <br>
+3rd level < body> <br>
+4th level < div> <br>
+5th level < p> <br>
+6th level There's not much to this. <br>
+</ p> <br>
+5th level < p> <br>
+6th level Nor to this. <br>
+</ p> <br>
+</ div> <br>
+</ body> <br>
+</ html> <br>
+This is how I diagrammed the DOM for the page. <br>
+192 <br>
+But this diagram is valid for only a couple of browsers. Most browsers interpret the <br>
+whitespace that's created by some carriage returns, tabs, and spaces used to format the code <br>
+as text nodes. When you look at the markup, you see 3 text nodes, the children of the title <br>
+element and of the two paragraph elements. <br>
+1st level: document <br>
+2nd level: < html> <br>
+3rd level: < head> <br>
+4th level: < title> <br>
+5th level: Simple document <br>
+</ title > <br>
+</ head > <br>
+3rd level < body> <br>
+4th level < div> <br>
+5th level < p> <br>
+6th level There's not much to this. <br>
+< /p> <br>
+5th level < p> <br>
+6th level Nor to this. <br>
+< /p> <br>
+< /div> <br>
+< /body> <br>
+< /html> <br>
+Firefox sees this markup with 8 additional text nodes that are nothing but whitespace <br>
+created by indenting. <br>
+These extra text nodes create noise that makes it hard for your DOM-reading code to find <br>
+the signal. In one browser, the first child of the body node might be a div. In another browse <br>r,
+the first child of the body might be an empty text node. <br>
+There are a number of solutions. As one approach, the Mozilla Developer Network <br>
+suggests a workaround that's almost comically desperate but does solve the problem without <br>
+any extra effort from JavaScript. You format the markup like this. <br>
+< html <br>
+>< head <br>
+>< title <br>
+>Simple document <br>
+< /title <br>
+>< /head <br>
+>< body <br>
+>< div <br>
+>< p <br>
+194 <br>
+>There's not much to this. <br>
+< /p <br>
+>< p <br>
+>Nor to this. <br>
+< /p <br>
+>< /div <br>
+>< /body <br>
+>< /html> <br>
+This markup takes advantage of the fact that any carriage returns, tabs, and spaces that are <br>
+enclosed in the < and the > of a tag are ignored by the browser. To the browser, < p > is the <br>
+same as < p>. And... <br>
+< <br>
+div <br>
+> <br>
+...is the same as < div>. <br>
+When whitespace is inside the brackets, the browser doesn't count it as a text node. So if <br>
+you "hide" all carriage returns, tabs, and spaces inside the brackets as the code above does, <br>
+there's no junk in the DOM. Any noise that would keep your JavaScript from reading the signal <br>
+is removed. <br>
+You can also clean out junk in the DOM by using a minifier program like the one at <br>
+http://www.willpeavy.com/minifier/. You will, of course, want to preserve the original, nonmin ified version of the file so you can revise the page in the future without going crazy.<br>
+< html>< head>< title>Simple document< /title>< /head>< body>< div>< p>There's not much to this.< /p>< p>Nor to this. <br>
+< /p>< /div>< /body>< /html> <br>
+Another approach is to format your HTML conventionally and let your JavaScript sniff <br>
+out the junk nodes. JavaScript can check a node to see what type it is—element, text, comment, <br>
+and so on. For example, this statement checks the node type of a targeted node and assigns it to<br>
+the variable nType. <br>
+var nType = targetNode.nodeType; <br>
+In the statement above, JavaScript assigns a number representing the node type to the <br>
+variable nType. If the node is an element like < div> or < p>, the number is 1. If it's a text node, <br>
+the number is 3. < br>
+Suppose you want to replace the text content of the second paragraph in a particular div  <br>
+with the string "All his men." Here's the markup, with the text we're going to change <br>
+highlighted. < br>
+< div id="humpty"> < br>
+< p>All the king's horses.< /p> <br>
+< p>All the dude's crew.< /p> <br>
+< p>All the town's orthopedists.< /p> <br>
+< /div> <br> 
+This is the code. <br>
+1 var d = document.getElementById("humpty"); <br>
+195 <br>
+2 var pCounter = 0; <br>
+3 for (var i = 0; i < d.childNodes.length; i++) { <br>
+4 if (d.childNodes[i].nodeType === 1 ) { <br>
+5 pCounter++; <br>
+6 } <br>
+7 if (pCounter === 2) { <br>
+8 d.childNodes[i].innerHTML = "All his men."; <br>
+9 break; <br>
+10 } <br>
+11 } <br>
+Here's the breakdown: <br>
+1 Assigns the div to the variable d <br>
+2 Counts the number of paragraphs <br>
+3 Goes through the children of the div looking for the next element node, i.e. Type 1, <br>
+which we assume is a paragraph <br>
+4-6 Adds 1 to the counter. We're looking for the second paragraph. <br>
+7-9 When the counter hits 2, we've reached the targeted paragraph. Change the text <br>
+Of course, if you know you might want your JavaScript to change that second paragraph, <br>
+it would be a lot easier to assign it an id, and go straight to it, like this. <br>
+document.getElementById("p2").innerHTML = "All his men."; <br>
+You can see why the getElementId method is more popular with coders than tracing the <br>
+DOM hierarchy. But there are some things you can't do without working your way through the <br>
+parent-child relationships of the DOM, as you'll learn in subsequent chapters. <br>
+      </p> 
+    </div> 
+    <div class="moiz">
+      <h1>-: The DOM:More ways to target elements :-</h1>
+      <p class="ali">
+        So far you've learned to use the DOM's parent-child hierarchy to target a child node of a  <br>
+parent node by specifying its order in an array-like collection of children—childNodes[0], <br>
+childNodes[1], childNodes[2], and so on. But there are other ways to use the hierarchy for <br>
+targeting. To begin with, instead of writing childNodes[0], you can write firstChild. And <br>
+instead of writing, for example, childNodes[9], to target the 10th child in a 10-child <br>
+collection of children, you can write lastChild. <br>
+var targetNode = parentNode.childNodes[0]; <br>
+...is the same as... <br>
+var targetNode = parentNode.firstChild; <br>
+And if there are, for example, 3 child nodes... <br>
+var targetNode = parentNode.childNodes[2]; <br>
+...is the same as... <br>
+var targetNode = parentNode.lastChild; <br>
+You can also work backwards, targeting the parent node of any child node. Let's say you <br>
+have this markup. Using the DOM, how do you find the parent of the highlighted div? <br>
+< div id="div1"> <br>
+< div id="div2"> <br>
+< p>Chicago< /p> <br>
+< p>Kansas City< /p> <br>
+< p>St. Louis< /p> <br>
+< /div> <br>
+< /div> <br>
+You want to know the parent of the div with the id "div2". The following code assigns the <br>
+parent of the "div2" div to the variable pNode.<br>
+1 var kidNode = document.getElementById("div2");<br>
+2 var pNode = kidNode.parentNode;<br>
+You can use nextSibling and previousSibling to target the next child and the<br>
+previous child in the collection of an element's children. In the following code, the first<br>
+statement targets a div with the id "div1". The second statement targets the next node that has<br>
+the same parent as the "div1" id.<br>
+1 var firstEl = document.getElementById("div1");<br>
+2 secondEl = firstEl.nextSibling;<br>
+If there is no nextSibling or previousSibling, you get null. In the following code, the<br>
+variable nonexistentEl has a value of null, because JavaScript finds that there is no<br>
+previous node that has the same parent as firstEl.<br>
+1 var firstEl = document.getElementById("div1");<br>
+2 var nonexistentEl = firstEl.previousSibling;<br>
+Counting siblings can be tricky, because, as you know, some browsers treat whitespace<br>
+created by HTML formatting as text nodes, even though they're empty and without significance.<br>
+In the HTML example above, with two divs and three paragraphs, you might think that the<br>
+next sibling of the first paragraph is the second paragraph. But actually, in some browsers, the<br>
+first paragraph's next sibling is an empty text node. The next sibling of that node is thes econd<br> 
+paragraph.<br>
+What this means is that in order to target a node with nextSibling or<br>
+previousSibling, you have to either format your HTMLmarkup defensively as I showed you<br>
+in the last chapter, or else type-test each node to make sure it's the kind you're looking for, as I<br>
+also showed you in the last chapter.<br>
+Once again, I'll say that you're often better off assigning an id to any node you might want<br>
+to "read" or change. Then you can target the node more directly, using<br>
+document.getElementById.
       </p>
     </div>
     <div class="moiz">
-      <h1>-: :-</h1>
+      <h1>-: The DOM:Getting a target's name :-</h1>
       <p class="ali">
-        <!-- 2 -->
+        In a previous chapter you learned how to get a node's node type with a statement like this.  <br>
+var nType = targetNode.nodeType; <br>
+In the example above, if the node is an element, the variable nType will be assigned the <br>
+number 1. If the node is text, it'll be assigned the number 3. <br>
+You can get additional information about a node by using nodeName. In the following <br>
+example, the node name of the target node is assigned to the variable nName. <br>
+1 var parent = document.getElementById("div1"); <br>
+2 var target = parent.firstChild; <br>
+3 nName = target.nodeName; <br>
+Lines 1 and 2 target the first child of an element with the id "div1". Line 3 assigns the <br>
+node name of the target to the variable nName. <br>
+In the example above, if the node is an element, the variable nName will be assigned a <br>
+string, like P or DIV, that corresponds to the characters of the tag that are enclosed in the <br>
+brackets. In HTML, the name is usually given in all-caps, even if the markup is in lowercase. <br>
+Tag Node Name <br>
+<table border="2">
+  <tr>
+    <td>< p> or < P></td>
+    <td>p</td>
+  </tr>
+  <tr>
+    <td>< div> or < DIV></td>
+    <td>DIV</td>
+  </tr>
+  <tr>
+    <td>< span> or < SPAN></td>
+    <td>SPAN</td>
+  </tr>
+  <tr>
+    <td>< img> or < IMG></td>
+    <td>IMG</td>
+  </tr>
+  <tr>
+    <td>< a> or < A></td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>< em> or < EM></td>
+    <td>EM</td>
+  </tr>
+  <tr>
+    <td>< table> or < TABLE></td>
+    <td>p</td>
+  </tr>
+  <tr>
+    <td>< li> or < LI></td>
+    <td>LI</td>
+  </tr>
+</table>
+<div class="moiz">
+  <p class="ali">
+On the other hand, if the node is a text node, the name of the node is always #text—in  <br>
+lower-case. <br>
+If it's a text node, you can find out its value—i.e. its content—this way. <br>
+1 var parent = document.getElementById("div1"); <br>
+2 var target = parent.firstChild; <br>
+3 var nTextContent = target.nodeValue; <br>
+Lines 1 and 2 target the first child of an element with the id "div1". Line 3 assigns the <br>
+node value to the variable nTextContent. <br>
+So if this is the markup, with the first child of the H2 element a node with the name <br>
+"#text"... <br>
+< h2>Do < em> not < /em> hit!< /h2> <br>
+...the node value is "Do ". <br>
+An element node like P or IMG has a name but no value. If you try to assign an element <br>
+node value to a variable, the variable will be assigned null. <br>
+< h2>Do < em>not< /em> hit!< /h2> <br>
+In the above example, < em> is an element, which means its value is null. <br>
+It's possible to confuse the node value of a text node with the innerHTML property. There <br>
+are two differences. <br>
+innerHTML is a property of the element node, < h2>, in the above example. The node <br>
+value is a property of the text node itself, not the parent element. <br>
+innerHTML includes all the descendants of the element, including any inner element nodes <br>
+like < em> as well as text nodes. The node value includes only the characters that <br>
+comprise the single text node. <br>
+In the following code, the innerHTML of the H2 element is highlighted. <br>
+< h2>Do < em>not< /em> hit!< /h2> <br>
+In the following code, the node value of the first child of the H2 element is highlighted. <br>
+< h2>Do < em> not < /em> hit!< /h2> <br>
+Since there are situations in which nodeName gets you, for example, a "p" instead of a "P" <br>
+or an "href" instead of an "HREF," it's good practice to standardize the case when you're <br>
+testing for names, like this. <br>
+if (targetNode.nodeName.toLowerCase === "img") { <br>
+If the node name was originally upper-case, the code changes it to lower-case. If it was <br>
+lower-case to begin with, no harm done. <br>
+If you're checking a node name to see if a node is a text node, converting to lower-case <br>
+isn't necessary, because the name of a text node is always "#text", never "#TEXT". <br>
       </p>
     </div>
     <div class="moiz">
-      <h1>-: :-</h1>
+      <h1>-: The DOM:Counting elements :-</h1>
       <p class="ali">
-        <!-- 1 -->
+        In an earlier chapter you learned how to make an array-like collection of all the elements  <br>
+that share a particular tag name. For example, the following code makes a collection of all the <br>
+< li> elements and assigns the collection to the variable liElements. <br>
+var liElements = getElementsByTagName("li"); <br>
+Once you have the collection of elements, you can find out how many of them there are. In <br>
+the following code, the number of < li> elements in the collection represented by liElements <br>
+is assigned to the variable howManyLi. <br>
+var howManyLi = liElements.length; <br>
+Then you can, for example, cycle through the collection looking for < li> elements that <br>
+have no text, and can enter some placeholder text. <br>
+1 for (var i = 0; i < howManyLi; i++) { <br>
+2 if (liElements[i].innerHTML === "") { <br>
+3 liElements[i].innerHTML = "coming soon"; <br>
+4 } <br>
+5 } <br>
+I've walked you through this to introduce you to an analagous move you can make using <br>
+the DOM hierarchy rather than tag names. You can make a collection of all the child nodes of a <br>
+targeted node. <br>
+1 var parentNode = document.getElementById("d1"); <br>
+2 var nodeList = parentNode.childNodes; <br>
+Line 1 assigns an element with the id "d1" to the variable parentNode. Line 2 assigns a <br>
+collection of the child nodes of parentNode to nodeList. <br>
+You can get the number of items in the collection. The following statement assigns the <br>
+number of items in the node collection to the variable howManyKids. <br>
+var howManyKids = nodeList.length; <br>
+Then you can target any item in the collection. The following code counts the number of <br>
+images within the div. <br>
+1 var numberPics = 0; <br>
+2 for (var i = 0; i < howManyKids; i++) { <br>
+3 if (nodelist[i].nodeName.toLowerCase() === "img") { <br>
+4 numberPics++; <br>
+5 } <br>
+6 } <br>
+Here's the breakdown: <br>
+1 Declares the image-counter and sets it at 0 <br>
+2 Loops through all the children of the div <br>
+3-5 If the node name, converted to lower-case, is "img", increments the image-counter <br>
+      </p> 
+    </div> 
+    <div class="moiz">
+      <h1>-: The DOM:Attributes :-</h1>
+      <p class="ali">
+        Take a look at this bit of markup.  <br>
+< a href="http://www.amazon.com">Shop< /a> <br>
+You've learned that in the above markup the text node "Shop" is the first (and only) child <br> 
+of the element node < a>. But what is href="http://www.amazon.com"? It's definitely a node <br>
+of the DOM, and you could say that it's subsidiary to < a>. But it's not a child of < a>. It's an <br>
+attribute of < a>. <br>
+Whenever you see this form... <br>
+< element something="something in quotes"> <br>
+...you're looking at an element with an attribute. The equal sign and the quotes are the <br>
+tipoff. The word on the left side of the equal sign is the attribute name. The word on the right <br>
+side of the equal sign is the attribute value. <br>
+Here are more examples. The attribute values are highlighted. <br>
+< div id="p1"> <br>
+< p class="special"> <br>
+< img src="images/slow-loris.png"> <br>
+< span style="font-size:24px;"> <br>
+An element can have any number of attributes. In this tag, the element img has 4 attributes. <br>
+I've highlighted their values. <br>
+< img src="dan.gif" alt="Dan" height="42" width="42"> <br>
+You can find out whether an element has a particular attribute with hasAttribute. <br>
+1 var target = document.getElementById("p1"); <br>
+2 var hasClass = target.hasAttribute("class"); <br>
+Line 1 assigns the element to a variable, target. Line 2 checks to see if the element has <br>
+an attribute called "class". If it does, the variable hasClass is assigned true. If not, it is <br>
+assigned false. <br>
+You can read the value of an attribute with getAttribute. <br>
+1 var target = document.getElementById("div1"); <br>
+2 var attVal = target.getAttribute("class"); <br>
+Line 1 assigns the element to a variable, target. Line 2 reads the value of the attribute <br>
+and assigns it to the variable attVal. <br>
+You can set the value of an attribute with setAttribute. <br>
+1 var target = document.getElementById("div1"); <br>
+2 target.setAttribute("class, "special"); <br>
+Line 1 assigns the element to a variable, target. Line 2 gives it an attribute "class" (the <br>
+first specification inside the parens) with a value of "special" (the second specification inside <br>
+the parens). In effect, the markup becomes: <br>
+< div id="div1" class="special"> 
       </p>
     </div>
     <div class="moiz">
-      <h1>-: :-</h1>
+      <h1>-: The DOM:Attribute names and values :-</h1>
       <p class="ali">
-        <!-- 2 -->
-      </p>
+        In previous chapters you learned how to make a collection of elements that share the same <br>
+tag name, with a statement like this... <br>
+var list = document.getElementsByTagName("p"); <br>
+...and how to make a collection of all the children of an element, with a statement like <br>
+this... <br>
+var list = document.getElementById("p1").childNodes; <br>
+Similarly, you can make a collection of all the attributes of an element, with a statement <br>
+like this... <br>
+var list = document.getElementById("p1").attributes; <br>
+With the collection assigned to a variable, you can get the number of items in the <br>
+collection... <br>
+var numOfItems = list.length; <br>
+Alternatively, you could compress these tasks into a single statement, without assigning <br>
+the target to a variable first. <br>
+var numOfItems = document.getItemById("p1").attributes.length; <br>
+Using array-like notation, you can find out the name of any attribute in the collection. The <br>
+following statement targets the third item in the collection of attributes and assigns its name to <br>
+the variable nName. <br>
+var nName = list[2].nodeName; <br>
+For example, if the markup is... <br>
+< p id="p1" class="c1" onMouseover="chgColor();"> <br>
+...the variable nName is assigned "onMouseover". <br>
+You can also get the value of the attribute... <br>
+var nValue = list[2].nodeValue; <br>
+In the example markup above, the variable nValue is assigned "chgColor();". 
+      </p>  
     </div>
     <div class="moiz">
-      <h1>-: :-</h1>
+      <h1>-: The DOM:Adding nodes :-</h1>
       <p class="ali">
-        <!-- 1 -->
-      </p>
-    </div>
-    <div class="moiz">
-      <h1>-: :-</h1>
-      <p class="ali">
-        <!-- 2 -->
-      </p>
-    </div>
-    <div class="moiz">
-      <h1>-: :-</h1>
-      <p class="ali">
-        <!-- 1 -->
-      </p>
-    </div>
-    <div class="moiz">
-      <h1>-: :-</h1>
-      <p class="ali">
-        <!-- 2 -->
-      </p>
+        Using the DOM hierarchy, you can add element, attribute, and text nodes anywhere in the<br>
+head or body sections of a document. In this chapter you'll learn how to create a paragraph<br>
+node, give it an attribute, and fill it with text content. In the next chapter, you'll learn how to<br>
+insert the paragraph, along with its attributes and text content, into the page.<br>
+The first step is to create the paragraph node.<br>
+var nodeToAdd = document.createElement("p");<br>
+The example creates a paragraph element. To create a div element, you'd put "div" in the<br>
+parentheses. To create an image element, you'd put "img" there. To create a link, you'd put "a"<br>
+there. And so on.<br>
+Here's a statement that creates an image element.<br>
+var imgNodeToAdd = document.createElement("img");<br>
+In the last chapter, you learned how to add an attribute to an element that's already part of<br>
+the web page, using setAttribute. You can do the same thing with an element that you've<br>
+created but haven't yet placed in the document body.<br>
+nodeToAdd.setAttribute("class", "regular");<br>
+The code above gives the new paragraph element that you just created the class "regular".<br>
+If you wanted to, you could add, using separate statements for each, more attributes to the<br>
+paragraph element—for example, a span, a style, even an id.<br>
+If the element were an < img> element, you could add a border or an alt as an attribute. If<br>
+it were an < a> element, you could add the web address.<br>
+This statement adds a border attribute to an image element.<br>
+imgNodeToAdd.setAttribute("border", "1");<br>
+The code above gives the image a 1-pixel border.<br>
+Remember, at this point, we're just creating nodes. The new attribute node has been<br>
+connected to the new element node, but we haven't added the nodes to the page yet.<br>
+Getting back to the paragraph element, we've created it and added a class attribute to it.<br>
+Now let's give it some text content. Again, we begin by creating the node we want.<br>
+var newTxt = document.createTextNode("Hello!");<br>
+The statement above creates a text node with the content "Hello!"<br>
+Next, we place the text into the paragraph element.<br>
+nodeToAdd.appendChild(newTxt);<br>
+The statement above adds the new text node, whose content is "Hello!", to the new<br>
+paragraph node.<br>
+Now we have a new paragraph node with a class attribute and some text content. We're<br>
+ready to insert it into the page.<br>
+      </p><br>
     </div>
     <div class="moiz">
       <h1>Assignment</h1>
       <p class="ali">
-        <object data="./" type="application/pdf" width="100%" height="500px">
+        <object data="./XkySfi_.pdf" type="application/pdf" width="100%" height="500px">
           <p>
             Unable to display PDF file.
-            <a href="./chapters9-11-1.pdf">Download</a>
+            <a href="./XkySfi_.pdf">Download</a>
             instead.
           </p>
         </object>
